@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">Pokeapi Searcher</string>
+    <string name="item_name">item_name</string>
 </resources>
