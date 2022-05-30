@@ -1,4 +1,4 @@
-package andrzej.lech.pokeapisearcher.ui.main.adapters.pokemonAdapter
+package andrzej.lech.pokeapisearcher.ui.adapters.pokemonAdapter
 
 import andrzej.lech.pokeapisearcher.network.models.Pokemon
 

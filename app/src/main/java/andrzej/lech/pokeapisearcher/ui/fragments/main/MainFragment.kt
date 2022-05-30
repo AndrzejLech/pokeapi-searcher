@@ -1,4 +1,4 @@
-package andrzej.lech.pokeapisearcher.ui.main
+package andrzej.lech.pokeapisearcher.ui.fragments.main
 
 import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
@@ -11,15 +11,14 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import andrzej.lech.pokeapisearcher.MainActivity
 import andrzej.lech.pokeapisearcher.R
-import andrzej.lech.pokeapisearcher.network.models.ApiResponse
 import andrzej.lech.pokeapisearcher.network.models.Pokemon
-import kotlinx.coroutines.*
-import kotlinx.coroutines.channels.Channel
+import andrzej.lech.pokeapisearcher.ui.MainNavigation
+import andrzej.lech.pokeapisearcher.ui.adapters.pokemonAdapter.OnPokemonItemClickListener
+import andrzej.lech.pokeapisearcher.ui.adapters.pokemonAdapter.PokemonListAdapter
 
 class MainFragment : Fragment() {
     private val TAG = "MainFragment"
     private lateinit var recyclerView: RecyclerView
-    private lateinit var job: Job
 
     companion object {
         fun newInstance() = MainFragment()
@@ -27,6 +26,7 @@ class MainFragment : Fragment() {
 
     private lateinit var mainViewModel: MainViewModel
     private lateinit var pokemonList: List<Pokemon>
+    private val pokemonListAdapter = PokemonListAdapter(emptyList())
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -37,22 +37,37 @@ class MainFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         val linearLayoutManager = LinearLayoutManager(activity as MainActivity)
         mainViewModel = ViewModelProvider(this)[MainViewModel::class.java]
         recyclerView = view.findViewById(R.id.main_recycler_view)
         recyclerView.layoutManager = linearLayoutManager
 
-        job = CoroutineScope(Dispatchers.Main).launch {
-            pokemonList = mainViewModel.getPokemonList().receive().results
-            Log.d(TAG, mainViewModel.getPokemonList().receive().results.toString())
-            recyclerView.adapter = mainViewModel.setDataToRecyclerView(pokemonList)
+        pokemonListAdapter.setItemClickListener(object : OnPokemonItemClickListener {
+            override fun onDataClick(pokemon: Pokemon) {
+                navigateToPokemonDetail(pokemon)
+            }
+        })
+        recyclerView.adapter = pokemonListAdapter
+
+        mainViewModel.pokemonList.observe(
+            viewLifecycleOwner
+        ) { response ->
+            pokemonListAdapter.pokemonList = response
+            Log.d(TAG, response.toString())
+        }
+
+        if (savedInstanceState == null) {
+            mainViewModel.getPokemonList()
         }
     }
 
-    override fun onDestroyView() {
-        super.onDestroyView()
-        job.cancel()
-    }
+    private fun navigateToPokemonDetail(pokemon: Pokemon) {
+        val activity = activity
 
+        if (activity is MainNavigation) {
+            activity.navigateToDetail(pokemon)
+        } else {
+            Log.d(TAG, "This is not MainNavigation")
+        }
+    }
 }

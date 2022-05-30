@@ -1,5 +1,6 @@
-package andrzej.lech.pokeapisearcher.ui.main.adapters.pokemonAdapter
+package andrzej.lech.pokeapisearcher.ui.adapters.pokemonAdapter
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -7,12 +8,21 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.annotation.NonNull
 import androidx.recyclerview.widget.RecyclerView
+import andrzej.lech.pokeapisearcher.MainActivity
 import andrzej.lech.pokeapisearcher.R
 import andrzej.lech.pokeapisearcher.network.models.Pokemon
+import andrzej.lech.pokeapisearcher.ui.navigator.Destinations
+import andrzej.lech.pokeapisearcher.ui.navigator.Navigator
+import andrzej.lech.pokeapisearcher.ui.utils.addParcelToFragment
 
 class PokemonListAdapter(pokemonList: List<Pokemon>) :
     RecyclerView.Adapter<PokemonListAdapter.AdapterViewHolder>() {
     var pokemonList: List<Pokemon> = emptyList()
+    set(value){
+        field = value
+        notifyDataSetChanged()
+        Log.d("PokemonListAdapter", value.toString())
+    }
     private lateinit var onPokemonItemClickListener: OnPokemonItemClickListener
 
     init {
