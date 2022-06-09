@@ -12,7 +12,7 @@ class RetrofitHandler(context: Context) {
     private val retrofitInstance =
         RetrofitHelper.getInstance(context).create(RetrofitService::class.java)
 
-    suspend fun getPokemonList(): ApiResponse? {
+    suspend fun getPokemonList(): ApiResponse {
         Log.d(TAG, "Starting get...")
         val result = retrofitInstance.getPokemonList()
         val body = result.body() ?: throw IOException("empty body")

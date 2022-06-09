@@ -7,4 +7,8 @@
     <string name="no_pokemons">No Pokemons?</string>
     <string name="unhandled_error">Unhandled Error</string>
     <string name="retry">Retry</string>
+    <string name="splash_screen_image_description">Splash image saying the name of the app</string>
+    <string name="no_data_image_description">Image of no data error</string>
+    <string name="unhandled_error_image_description">Unhandled Error Image</string>
+    <string name="sprite_image_description">Sprite Image</string>
 </resources>

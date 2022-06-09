@@ -7,9 +7,8 @@ import androidx.core.content.ContextCompat
 import andrzej.lech.pokeapisearcher.R
 
 class TypeHandler {
-    fun decideTypeDrawable(context: Context, type: String): Drawable? {
-        val drawable: Drawable =
-            requireNotNull(ContextCompat.getDrawable(context, R.drawable.round))
+    fun decideTypeDrawable(context: Context, type: String): Drawable {
+        val drawable: Drawable = requireNotNull(ContextCompat.getDrawable(context, R.drawable.round))
 
 
         when (type) {

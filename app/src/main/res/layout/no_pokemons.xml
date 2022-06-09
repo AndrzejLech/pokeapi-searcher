@@ -10,7 +10,8 @@
         android:id="@+id/no_pokemon_image"
         android:layout_width="216dp"
         android:layout_height="300dp"
-        android:src="@drawable/no_pokes" />
+        android:src="@drawable/no_pokes"
+        android:contentDescription="@string/no_data_image_description" />
 
     <TextView
         android:id="@+id/no_pokemon_text"

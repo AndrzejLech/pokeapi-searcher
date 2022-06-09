@@ -43,9 +43,9 @@ class PokemonListAdapter(pokemonList: List<Pokemon>) :
 
     inner class PokemonViewHolder(
         itemView: View,
-        onPokemonItemClickListener: OnPokemonItemClickListener
+        private val onPokemonItemClickListener: OnPokemonItemClickListener
     ) : RecyclerView.ViewHolder(itemView), View.OnClickListener {
-        val name = itemView.findViewById<TextView>(R.id.item_name)
+        val name: TextView = itemView.findViewById(R.id.item_name)
 
         init {
             val dataItem = itemView.findViewById<LinearLayout>(R.id.layout_horizontal)

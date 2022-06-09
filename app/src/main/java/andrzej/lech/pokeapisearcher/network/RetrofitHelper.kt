@@ -1,6 +1,7 @@
 package andrzej.lech.pokeapisearcher.network
 
 import android.content.Context
+import com.chuckerteam.chucker.api.ChuckerCollector
 import com.chuckerteam.chucker.api.ChuckerInterceptor
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
@@ -15,7 +16,14 @@ object RetrofitHelper {
             .addConverterFactory(GsonConverterFactory.create())
             .client(
                 OkHttpClient.Builder()
-                    .addInterceptor(ChuckerInterceptor(context))
+                    .addInterceptor(
+                        ChuckerInterceptor.Builder(context)
+                            .collector(ChuckerCollector(context))
+                            .maxContentLength(250000L)
+                            .redactHeaders(emptySet())
+                            .alwaysReadResponseBody(false)
+                            .build()
+                    )
                     .build()
             )
             .build()
