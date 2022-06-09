@@ -7,22 +7,20 @@ import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.annotation.NonNull
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import andrzej.lech.pokeapisearcher.MainActivity
 import andrzej.lech.pokeapisearcher.R
 import andrzej.lech.pokeapisearcher.network.models.Pokemon
-import andrzej.lech.pokeapisearcher.ui.navigator.Destinations
-import andrzej.lech.pokeapisearcher.ui.navigator.Navigator
-import andrzej.lech.pokeapisearcher.ui.utils.addParcelToFragment
 
 class PokemonListAdapter(pokemonList: List<Pokemon>) :
-    RecyclerView.Adapter<PokemonListAdapter.AdapterViewHolder>() {
+    ListAdapter<Pokemon, PokemonListAdapter.PokemonViewHolder>(PokemonDiff()) {
     var pokemonList: List<Pokemon> = emptyList()
-    set(value){
-        field = value
-        notifyDataSetChanged()
-        Log.d("PokemonListAdapter", value.toString())
-    }
+        set(value) {
+            field = value
+            submitList(pokemonList)
+            Log.d("PokemonListAdapter", value.toString())
+        }
     private lateinit var onPokemonItemClickListener: OnPokemonItemClickListener
 
     init {
@@ -30,29 +28,24 @@ class PokemonListAdapter(pokemonList: List<Pokemon>) :
     }
 
     @NonNull
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PokemonListAdapter.AdapterViewHolder {
-        val view: View = LayoutInflater.from(parent.context).inflate(R.layout.pokemon_list_item, parent, false)
-        return AdapterViewHolder(view, onPokemonItemClickListener)
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PokemonViewHolder {
+        val view: View = LayoutInflater.from(parent.context).inflate(R.layout.item_pokemon_list, parent, false)
+        return PokemonViewHolder(view, onPokemonItemClickListener)
     }
 
-    override fun getItemCount(): Int {
-        return pokemonList.size
+    override fun onBindViewHolder(holder: PokemonViewHolder, position: Int) {
+        holder.onBind(pokemonList[position])
     }
 
-    fun setItemClickListener(onPokemonItemClickListener: OnPokemonItemClickListener){
+    fun setItemClickListener(onPokemonItemClickListener: OnPokemonItemClickListener) {
         this.onPokemonItemClickListener = onPokemonItemClickListener
     }
 
-    override fun onBindViewHolder(holder: AdapterViewHolder, position: Int) {
-        val singlePokemon: Pokemon = pokemonList[position]
-        holder.setupName(singlePokemon.name)
-    }
-
-    inner class AdapterViewHolder(
-        @NonNull itemView: View,
-        private var onPokemonItemClickListener: OnPokemonItemClickListener
-    ): RecyclerView.ViewHolder(itemView), View.OnClickListener {
-    private val name: TextView = itemView.findViewById(R.id.item_name)
+    inner class PokemonViewHolder(
+        itemView: View,
+        onPokemonItemClickListener: OnPokemonItemClickListener
+    ) : RecyclerView.ViewHolder(itemView), View.OnClickListener {
+        val name = itemView.findViewById<TextView>(R.id.item_name)
 
         init {
             val dataItem = itemView.findViewById<LinearLayout>(R.id.layout_horizontal)
@@ -66,8 +59,19 @@ class PokemonListAdapter(pokemonList: List<Pokemon>) :
             onPokemonItemClickListener.onDataClick(currentData)
         }
 
-        internal fun setupName(name: String){
-            this.name.text = name
+        fun onBind(pokemon: Pokemon) {
+            name.text = pokemon.name
         }
     }
+}
+
+class PokemonDiff : DiffUtil.ItemCallback<Pokemon>() {
+    override fun areItemsTheSame(oldItem: Pokemon, newItem: Pokemon): Boolean {
+        return oldItem == newItem
+    }
+
+    override fun areContentsTheSame(oldItem: Pokemon, newItem: Pokemon): Boolean {
+        return oldItem == newItem
+    }
+
 }

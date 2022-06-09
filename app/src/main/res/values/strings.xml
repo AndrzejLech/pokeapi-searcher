@@ -1,4 +1,10 @@
 <resources>
     <string name="app_name">Pokeapi Searcher</string>
     <string name="item_name">item_name</string>
+    <string name="order">#%d</string>
+    <string name="height_title">height:</string>
+    <string name="weight_title">weight:</string>
+    <string name="no_pokemons">No Pokemons?</string>
+    <string name="unhandled_error">Unhandled Error</string>
+    <string name="retry">Retry</string>
 </resources>

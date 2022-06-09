@@ -2,7 +2,7 @@ package andrzej.lech.pokeapisearcher.network.models
 
 import java.io.Serializable
 
-class Pokemon (
+data class Pokemon (
     var name: String,
     val url: String
 ) : Serializable
